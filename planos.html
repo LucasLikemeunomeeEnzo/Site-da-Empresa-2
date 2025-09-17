@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacotes de Cadastro - PubliMatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --influencer-color: #f69420;
+            --agency-color: #2b6cb0;
+            --enterprise-color: #19b5cd;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .card-influencer:hover { border-color: var(--influencer-color); }
+        .btn-influencer { background-color: var(--influencer-color); }
+        .btn-influencer:hover { background-color: #d87e1c; }
+
+        .card-agency:hover { border-color: var(--agency-color); }
+        .btn-agency { background-color: var(--agency-color); }
+        .btn-agency:hover { background-color: #2c5282; }
+
+        .card-enterprise:hover { border-color: var(--enterprise-color); }
+        .btn-enterprise { background-color: var(--enterprise-color); }
+        .btn-enterprise:hover { background-color: #15a3b9; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-5xl w-full text-center p-8 bg-white rounded-2xl shadow-xl transition-all duration-500">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Escolha o seu Pacote</h1>
+        <p class="text-lg text-gray-500 mb-10">Selecione a opção que melhor se encaixa no seu perfil profissional.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <div class="card-influencer bg-white p-8 rounded-2xl shadow-lg border-2 border-transparent transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Influenciador</h3>
+                    <p class="text-gray-500 mb-6 h-20">Para influenciadores que buscam gerenciar suas parcerias de forma autônoma.</p>
+                    <ul class="text-sm text-left text-gray-600 list-disc list-inside space-y-2 mb-8">
+                        <li>Acesso à plataforma</li>
+                        <li>Ferramentas de análise</li>
+                        <li>Suporte via comunidade</li>
+                    </ul>
+                </div>
+                <a href="cadastro.html" class="btn-influencer w-full px-6 py-3 inline-block font-semibold text-white rounded-lg shadow-md hover:shadow-lg transition-all">
+                    Selecionar Plano
+                </a>
+            </div>
+
+            
+            <div class="card-agency bg-white p-8 rounded-2xl shadow-lg border-2 border-transparent transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Agência</h3>
+                    <p class="text-gray-500 mb-6 h-20">Para agências que gerenciam múltiplos talentos e campanhas.</p>
+                    <ul class="text-sm text-left text-gray-600 list-disc list-inside space-y-2 mb-8">
+                        <li>Múltiplos usuários</li>
+                        <li>Painel de controle</li>
+                        <li>Análise avançada</li>
+                        <li>Suporte prioritário</li>
+                    </ul>
+                </div>
+                <a href="cadastro agencia.html" class="btn-agency w-full px-6 py-3 inline-block font-semibold text-white rounded-lg shadow-md hover:shadow-lg transition-all">
+                    Selecionar Plano
+                </a>
+            </div>
+
+            <div class="card-enterprise bg-white p-8 rounded-2xl shadow-lg border-2 border-transparent transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+                <div class="flex-grow">
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">Empresa</h3>
+                    <p class="text-gray-500 mb-6 h-20">Para marcas que buscam gerenciar campanhas de marketing de influência.</p>
+                    <ul class="text-sm text-left text-gray-600 list-disc list-inside space-y-2 mb-8">
+                        <li>Usuários ilimitados</li>
+                        <li>Integração com CRM</li>
+                        <li>Relatórios personalizados</li>
+                        <li>Suporte dedicado 24/7</li>
+                    </ul>
+                </div>
+                <a href="cadastro enterprise.html" class="btn-enterprise w-full px-6 py-3 inline-block font-semibold text-white rounded-lg shadow-md hover:shadow-lg transition-all">
+                    Selecionar Plano
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-12 text-center">
+            <a href="index.html" class="text-gray-600 font-semibold hover:text-gray-800 transition-colors">
+                &larr; Voltar
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

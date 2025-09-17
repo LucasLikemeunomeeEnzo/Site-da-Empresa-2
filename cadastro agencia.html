@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de Agência - PubliMatch</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary-color: #2b6cb0; 
+    --primary-hover-color: #2c5282;
+    --dark-color: #1a202c;
+    --light-color: #f7fafc;
+    --body-text-color: #4a5568;
+    --heading-color: #1a202c;
+    --border-radius-sm: 6px;
+    --border-radius-md: 12px;
+    --shadow-soft: 0 4px 15px rgba(0,0,0,0.05);
+    --shadow-medium: 0 10px 25px -5px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+    --transition-speed: 0.3s;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; line-height:1.7; color:var(--body-text-color); background-color:var(--light-color); }
+.btn { display:inline-block; padding:12px 28px; border-radius:var(--border-radius-sm); font-weight:700; border:none; cursor:pointer; text-align:center; width:100%; transition: all var(--transition-speed) ease; }
+.btn-primary { background-color:var(--primary-color); color:#fff; box-shadow:var(--shadow-soft); }
+.btn-primary:hover { background-color:var(--primary-hover-color); transform:translateY(-3px); box-shadow:var(--shadow-medium); }
+.cadastro-wrapper { display:flex; min-height:100vh; }
+.image-pane { flex:1; background:linear-gradient(135deg,var(--primary-color) 0%,#1a202c 100%); display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:50px; color:#fff; }
+.image-pane h1 { font-size:3rem; font-weight:800; margin-bottom:20px; line-height:1.2; }
+.image-pane p { font-size:1.1rem; max-width:400px; opacity:0.9; }
+.image-pane a.back-link { color:#fff; text-decoration:none; margin-top:30px; font-weight:500; display:inline-block; border-bottom:1px solid rgba(255,255,255,0.5); transition: all var(--transition-speed) ease; }
+.image-pane a.back-link:hover { border-bottom-color:#fff; }
+.form-pane { flex:1; display:flex; justify-content:center; align-items:center; padding:40px; overflow-y:auto; }
+.form-container { width:100%; max-width:500px; min-height:70vh; display:flex; flex-direction:column; justify-content:center; position:relative; }
+.form-container h2 { font-size:2.5rem; margin-bottom:15px; color:var(--heading-color); }
+.form-container .subtitle { margin-bottom:40px; font-size:1.1rem; }
+.cadastro-form { display:flex; flex-direction:column; gap:20px; }
+.cadastro-form.hidden { display:none; }
+.form-group { display:flex; flex-direction:column; }
+.form-group label { margin-bottom:8px; font-weight:500; color:var(--heading-color); }
+.cadastro-form input, .cadastro-form textarea { width:100%; padding:15px; border:1px solid #ccd6e0; border-radius:var(--border-radius-sm); font-size:1rem; transition:border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; background-color:#fff; }
+.cadastro-form input:focus, .cadastro-form textarea:focus { outline:none; border-color:var(--primary-color); box-shadow:0 0 0 3px rgba(43,108,176,0.2); }
+#confirmation-message { text-align:center; display:none; flex-direction:column; justify-content:center; align-items:center; margin-top:20px; }
+#confirmation-message.visible { display:flex; }
+#confirmation-message .icon { width:80px; height:80px; margin:0 auto 20px auto; background-color:#e9f7ef; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+#confirmation-message .icon svg { color:#28a745; }
+#confirmation-message h3 { font-size:1.8rem; color:var(--heading-color); margin-bottom:10px; }
+#confirmation-message p { margin-bottom:0; }
+#status-message { text-align:center; font-weight:600; margin-top:20px; color:var(--heading-color); }
+@media (max-width:992px) { .cadastro-wrapper { flex-direction:column; } .image-pane { flex:0 0 300px; justify-content:center; align-items:center; text-align:center; padding-top:80px; } .image-pane h1 { font-size:2.5rem; } .form-pane { padding:40px 20px; } }
+</style>
+</head>
+<body>
+<div class="cadastro-wrapper">
+  <div class="image-pane">
+    <h1>Cadastre sua Agência</h1>
+    <p>Gerencie seus talentos de forma eficiente e descubra novas oportunidades de negócio.</p>
+    <a href="planos.html" class="back-link">← Voltar para a seleção de Pacotes</a>
+  </div>
+  <div class="form-pane">
+    <div class="form-container">
+      <h2 id="form-title">Crie sua conta</h2>
+      <p class="subtitle" id="form-subtitle">Preencha os dados da sua agência.</p>
+      <form class="cadastro-form" id="agencia-form">
+        <div class="form-group">
+          <label for="agencia_name">Nome da Agência</label>
+          <input type="text" name="agencia_name" id="agencia_name" placeholder="Nome completo da agência" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_name_agencia">Nome do Contato Principal</label>
+          <input type="text" name="contact_name_agencia" id="contact_name_agencia" placeholder="Ex: Ana Souza" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_email_agencia">E-mail do Contato</label>
+          <input type="email" name="contact_email_agencia" id="contact_email_agencia" placeholder="exemplo@agencia.com" required>
+        </div>
+        <div class="form-group">
+          <label for="document_agencia">CNPJ</label>
+          <input type="text" name="document_agencia" id="document_agencia" placeholder="00.000.000/0001-00" required>
+        </div>
+        <div class="form-group">
+          <label for="website">Website</label>
+          <input type="url" name="website" id="website" placeholder="https://www.suaagencia.com">
+        </div>
+        <div class="form-group">
+          <label for="social_media">Redes Sociais</label>
+          <input type="text" name="social_media" id="social_media" placeholder="Cole os links do Instagram, LinkedIn, etc.">
+        </div>
+        <div class="form-group">
+          <label for="description_agencia">Descrição da Agência</label>
+          <textarea name="description_agencia" id="description_agencia" rows="4" placeholder="Fale sobre o seu trabalho, clientes e influenciadores representados." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Enviar Solicitação</button>
+        <div id="status-message"></div>
+      </form>
+      <div id="confirmation-message">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3>Solicitação Enviada!</h3>
+        <p>Sua solicitação foi recebida com sucesso. Entraremos em contato em breve.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("6I8Nb9jstJwZvozjz"); })();
+
+document.getElementById('agencia-form').addEventListener('submit', function(event){
+  event.preventDefault();
+  const form = this;
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.innerText = 'Enviando...';
+
+  const templateParams = {
+    tipo_cadastro: 'Agência',
+    agencia_name: form.agencia_name.value,
+    contact_name_agencia: form.contact_name_agencia.value,
+    contact_email_agencia: form.contact_email_agencia.value,
+    document_agencia: form.document_agencia.value,
+    website: form.website.value,
+    social_media: form.social_media.value,
+    description_agencia: form.description_agencia.value
+  };
+
+  emailjs.send('service_3c53ugx', 'template_9fhk9fd', templateParams)
+  .then(() => {
+    document.getElementById('form-title').style.display = 'none';
+    document.getElementById('form-subtitle').style.display = 'none';
+    form.style.display = 'none';
+    document.getElementById('confirmation-message').classList.add('visible');
+  })
+  .catch(err => {
+    console.error('Erro ao enviar email:', err);
+    document.getElementById('status-message').innerText = 'Ocorreu um erro. Tente novamente.';
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'Enviar Solicitação';
+  });
+});
+</script>
+</body>
+</html>
+

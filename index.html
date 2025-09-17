@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komonew - Grupo Komonew</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover-color: #4338ca;
+            --dark-color: #111827;
+            --light-color: #f9fafb;
+            --body-text-color: #6b7280;
+            --heading-color: #111827;
+            --border-radius-sm: 8px;
+            --border-radius-md: 16px;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-hard: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--body-text-color);
+            background-color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: var(--border-radius-sm);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all var(--transition-speed) ease-in-out;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-image: linear-gradient(to right, #4f46e5, #6366f1);
+            color: #fff;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-hard);
+        }
+        
+        .btn-secondary {
+            background-color: var(--dark-color);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #000;
+            transform: translateY(-3px);
+        }
+
+        .section-padding {
+            padding: 120px 0;
+        }
+
+        .bg-light {
+            background-color: var(--light-color);
+        }
+
+        h1, h2, h3 {
+            color: var(--heading-color);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 70px auto;
+            font-size: 1.15rem;
+            color: #4b5563;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: box-shadow var(--transition-speed) ease, padding var(--transition-speed) ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-soft);
+            padding: 1rem 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 45px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin: 0 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--body-text-color);
+            font-weight: 600;
+            transition: color var(--transition-speed) ease;
+            position: relative;
+            padding-bottom: 6px;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            transition: all var(--transition-speed) cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hamburger .bar {
+            width: 28px;
+            height: 3px;
+            background-color: var(--dark-color);
+            border-radius: 3px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        #hero {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            padding: 160px 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e3a8a, #312e81, #4c1d95);
+        }
+        
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 800'%3E%3Cg fill-opacity='0.2'%3E%3Ccircle fill='%23ffffff' cx='400' cy='400' r='600'/%3E%3Ccircle fill='%231e3a8a' cx='400' cy='400' r='500'/%3E%3Ccircle fill='%23312e81' cx='400' cy='400' r='400'/%3E%3Ccircle fill='%234c1d95' cx='400' cy='400' r='300'/%3E%3Ccircle fill='%235b21b6' cx='400' cy='400' r='200'/%3E%3Ccircle fill='%237c3aed' cx='400' cy='400' r='100'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            animation: rotate 60s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        #hero .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        #hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        #hero p {
+            font-size: 1.3rem;
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            opacity: 0.9;
+        }
+
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 80px;
+            margin-top: 50px;
+        }
+
+        .text-content {
+            flex: 1;
+        }
+        
+        .text-content h3 {
+           font-size: 2rem;
+           margin-bottom: 20px;
+        }
+
+        .image-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .image-content img {
+            max-width: 100%;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-hard);
+        }
+        
+        #funcionalidades .section-subtitle {
+            margin-bottom: 20px;
+        }
+        .main-description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 70px auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card {
+            flex: 0 0 calc(33.333% - 24px);
+            margin: 0 12px;
+            background: #fff;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-soft);
+            padding: 30px;
+            text-align: center;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .initials-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .card-info h3 {
+            color: var(--dark-color);
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-info .role {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 1px solid #e5e7eb;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-medium);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .carousel-button:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        
+        .carousel-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .prev { left: -25px; }
+        .next { right: -25px; }
+
+        /* --- SEÇÃO DE CONTATO --- */
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .contact-item {
+            background: #fff;
+            padding: 40px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-soft);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .contact-icon {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .contact-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .contact-item a {
+            color: var(--body-text-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        .contact-item a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer {
+            background-color: var(--dark-color);
+            color: #9ca3af;
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .footer p {
+            margin-bottom: 20px;
+        }
+        
+        .social-links a {
+            color: #9ca3af;
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+        
+        /* --- MEDIA QUERIES PARA RESPONSIVIDADE --- */
+        @media (max-width: 992px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            .image-content {
+                order: -1;
+            }
+             .text-content h3 {
+                 text-align: center;
+             }
+            .card {
+                flex: 0 0 calc(50% - 24px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 2.5rem;
+            }
+            #hero h1 {
+                font-size: 3rem;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 74px; /* Altura da navbar */
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                box-shadow: var(--shadow-soft);
+                padding: 1rem 0;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+            
+            .navbar .container .btn {
+                display: none; /* Esconde o botão principal no modo hamburger */
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            /* Animação do Hamburger */
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .card {
+                flex: 0 0 calc(100% - 24px);
+            }
+            .prev { left: 0px; }
+            .next { right: 0px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho e Navegação -->
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="https://i.postimg.cc/7Yx3D9Pk/Komo.png" alt="Logo Komonew">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#projeto">O Projeto</a></li>
+                    <li><a href="#funcionalidades">Como Funciona</a></li>
+                    <li><a href="#equipe">Equipe</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="right-nav">
+                <a href="planos.html" class="btn btn-primary">Cadastrar</a>
+                <div class="hamburger">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    
+        <section id="hero">
+            <div class="container fade-in">
+                <h1>Conectando Marcas e Influencers</h1>
+                <p>PubliMatch é a ponte para parcerias de sucesso. Simplificamos a colaboração para que você possa focar no que faz de melhor: criar.</p>
+                <a href="planos.html" class="btn btn-primary">Comece Agora</a>
+            </div>
+        </section>
+
+    
+        <section id="projeto" class="section-padding">
+            <div class="container">
+                <h2 class="fade-in">A Plataforma Ideal para Sua Parceria</h2>
+                <p class="section-subtitle fade-in">Encontre as conexões certas, gerencie campanhas e analise resultados, tudo em um só lugar.</p>
+                
+                <div class="content-layout">
+                    <div class="text-content fade-in">
+                        <h3>Nossa Missão</h3>
+                        <p>PubliMatch nasceu da necessidade de criar um ecossistema transparente e eficiente para o marketing de influência. Nossa plataforma utiliza tecnologia de ponta para conectar marcas com os criadores de conteúdo ideais, garantindo campanhas autênticas e com alto poder de engajamento. Oferecemos ferramentas para gerenciamento, comunicação e análise de resultados, simplificando todo o processo de colaboração.</p>
+                    </div>
+                     <div class="image-content fade-in" style="transition-delay: 0.2s;">
+                        <img src="https://i.postimg.cc/253TYww6/publimatch.png" alt="Logo do Projeto PubliMatch">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="funcionalidades" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="fade-in">O Sistema PubliMatch</h2>
+                 <p class="section-subtitle fade-in">Uma plataforma digital que possibilita a comunicação entre agências e influenciadores para a realização de campanhas de forma profissional, segura e eficiente.</p>
+
+                <h3 class="fade-in" style="text-align: center; font-size: 1.8rem; margin-bottom: 50px;">Perfis de Usuários</h3>
+                <div class="features-grid">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon"><i data-feather="briefcase"></i></div>
+                        <div>
+                            <h3>Agente Publicitário</h3>
+                            <p>Representa agências e marcas, sendo responsável pela criação e gerenciamento das campanhas.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 0.1s;">
+                        <div class="feature-icon"><i data-feather="user"></i></div>
+                        <div>
+                            <h3>Influenciador</h3>
+                            <p>Busca oportunidades e utiliza a plataforma como uma vitrine para seus serviços e portfólio.</p>
+                        </div>
+                    </div>
+                    <div class="feature-card fade-in" style="transition-delay: 0.2s;">
+                        <div class="feature-icon"><i data-feather="users"></i></div>
+                          <div>
+                            <h3>Agente do Influenciador</h3>
+                            <p>Administra os perfis e contratos dos criadores de conteúdo que representa.</p>
+                        </div>
+                    </div>
+                </div>
+
+      <h3 class="fade-in" style="text-align: center; font-size: 1.8rem; margin-top: 100px; margin-bottom: 50px;">Recursos Principais</h3>
+<div class="features-grid">
+    <!-- Recurso 1 -->
+    <div class="feature-card fade-in">
+        <div class="feature-icon"><i data-feather="target"></i></div>
+        <div>
+            <h3>Gestão de Campanhas</h3>
+            <p>Recursos completos para cadastro, candidatura e contratação de influenciadores.</p>
+        </div>
+    </div>
+    <!-- Recurso 2 -->
+    <div class="feature-card fade-in" style="transition-delay: 0.1s;">
+        <div class="feature-icon"><i data-feather="message-square"></i></div>
+        <div>
+            <h3>Mensagens Internas</h3>
+            <p>Um sistema de comunicação direta para facilitar a negociação entre as partes.</p>
+        </div>
+    </div>
+    <!-- Recurso 3 -->
+    <div class="feature-card fade-in" style="transition-delay: 0.2s;">
+        <div class="feature-icon"><i data-feather="star"></i></div>
+        <div>
+            <h3>Sistema de Avaliação</h3>
+            <p>Avaliações pós-campanha para incentivar as boas relações e a profissionalidade.</p>
+        </div>
+    </div>
+    <!-- Recurso 4 -->
+    <div class="feature-card fade-in" style="transition-delay: 0.3s;">
+        <div class="feature-icon"><i data-feather="bar-chart-2"></i></div>
+        <div>
+            <h3>Métricas com I.A.</h3>
+            <p>Monitoramento de engajamento e resultados com o auxílio de inteligência artificial.</p>
+        </div>
+    </div>
+    <!-- Recurso 5 - Adicionado com base na descrição -->
+    <div class="feature-card fade-in" style="transition-delay: 0.4s;">
+        <div class="feature-icon"><i data-feather="monitor"></i></div>
+        <div>
+            <h3>Interface Intuitiva</h3>
+            <p>Uma interface responsiva e com foco em usabilidade, disponível em qualquer navegador.</p>
+        </div>
+    </div>
+    <!-- Recurso 6 - Adicionado com base na descrição -->
+    <div class="feature-card fade-in" style="transition-delay: 0.5s;">
+        <div class="feature-icon"><i data-feather="users"></i></div>
+        <div>
+            <h3>Gestão de Perfis</h3>
+            <p>Funcionalidade de vitrine para influenciadores e administração de perfis para agentes.</p>
+        </div>
+    </div>
+</div>
+        
+        <!-- Seção da Equipe com Carrossel -->
+        <section id="equipe" class="section-padding">
+            <div class="container">
+                <h2 class="fade-in">Nossa Equipe</h2>
+                <p class="section-subtitle fade-in">Os especialistas dedicados a construir as melhores conexões para você.</p>
+                <div class="carousel-wrapper fade-in">
+                    <div class="carousel-container">
+                        <div class="carousel-track">
+                            <!-- Card 1: Enzo Ferreira -->
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="initials-circle" style="background-color: #3b82f6;">EF</div>
+                                </div>
+                                <div class="card-info">
+                                    <h3>Enzo Ferreira</h3>
+                                    <p class="role">Analista</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Felipe da Cruz -->
+                            <div class="card">
+                                 <div class="card-image">
+                                    <div class="initials-circle" style="background-color: #ec4899;">FC</div>
+                                </div>
+                                <div class="card-info">
+                                    <h3>Felipe da Cruz</h3>
+                                    <p class="role">Desenvolvedor Fullstack</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Leonardo Rodrigues -->
+                            <div class="card">
+                                 <div class="card-image">
+                                    <div class="initials-circle" style="background-color: #22c55e;">LR</div>
+                                </div>
+                                <div class="card-info">
+                                    <h3>Leonardo Rodrigues</h3>
+                                    <p class="role">Desenvolvedor Backend</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Lucas Lopes -->
+                            <div class="card">
+                                <div class="card-image">
+                                    <div class="initials-circle" style="background-color: #f97316;">LL</div>
+                                </div>
+                                <div class="card-info">
+                                    <h3>Lucas Lopes</h3>
+                                    <p class="role">Arquivista</p>
+                                </div>
+                            </div>
+
+                            <!-- Card 5: Victor Gurgel -->
+                            <div class="card">
+                                 <div class="card-image">
+                                    <div class="initials-circle" style="background-color: #8b5cf6;">VG</div>
+                                </div>
+                                <div class="card-info">
+                                    <h3>Victor Gurgel</h3>
+                                    <p class="role">Desenvolvedor de Backend</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-button prev">&#10094;</button>
+                    <button class="carousel-button next">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="contato" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="fade-in">Fale Conosco</h2>
+                <p class="section-subtitle fade-in">Estamos sempre disponíveis para ajudar. Entre em contato por um de nossos canais.</p>
+                <div class="contact-info-grid">
+                    
+                    <div class="contact-item fade-in" style="transition-delay: 0.4s;">
+                        <div class="contact-icon">
+                            <i data-feather="user" width="40" height="40"></i>
+                        </div>
+                        <h3>Nossas Redes</h3>
+                        <p><a href="https://www.instagram.com/komonew.equipe" target="_blank">@komonew.equipe</a></p>
+                    </div>
+                    
+                    
+                
+                    <div class="contact-item fade-in" style="transition-delay: 0.2s;">
+                        <div class="contact-icon"><i data-feather="mail" width="40" height="40"></i></div>
+                        <h3>Envie um E-mail</h3>
+                        <p><a href="mailto:komonewcontato@gmail.com">komonewcontato@gmail.com</a></p>
+                    </div>
+                
+                    <div class="contact-item fade-in" style="transition-delay: 0.4s;">
+                        <div class="contact-icon"><i data-feather="phone-call" width="40" height="40"></i></div>
+                        <h3>Ligue Para Nós</h3>
+                        <p><a href="tel:+5513997426482">+55 (13) 99742-6482</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 PubliMatch. Todos os direitos reservados.</p>
+             <div class="social-links">
+                <a href="#" aria-label="Instagram"><i data-feather="instagram"></i></a>
+                <a href="#" aria-label="Facebook"><i data-feather="facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i data-feather="linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            
+            feather.replace();
+
+          
+            const navbar = document.querySelector('.navbar');
+            const fadeElements = document.querySelectorAll('.fade-in');
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => sectionObserver.observe(el));
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+       
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const allNavLinks = document.querySelectorAll('.nav-links a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            
+             allNavLinks.forEach(link => {
+                  link.addEventListener('click', () => {
+                       if (navLinks.classList.contains('active')) {
+                             hamburger.classList.remove('active');
+                             navLinks.classList.remove('active');
+                       }
+                  });
+             });
+
+
+            
+            const track = document.querySelector('.carousel-track');
+            if (track) {
+                const nextButton = document.querySelector('.next');
+                const prevButton = document.querySelector('.prev');
+                let currentIndex = 0;
+                
+                const updateCarousel = () => {
+                    const cards = Array.from(track.children);
+                    if (cards.length === 0) return;
+                    
+                    const cardStyle = window.getComputedStyle(cards[0]);
+                    const cardMargin = parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
+                    const cardWidth = cards[0].offsetWidth + cardMargin;
+                    
+                    const carouselContainer = document.querySelector('.carousel-container');
+                    const visibleCards = Math.floor(carouselContainer.offsetWidth / cardWidth);
+
+                    track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+                    
+                    prevButton.disabled = currentIndex === 0;
+                    nextButton.disabled = currentIndex >= cards.length - visibleCards;
+                };
+
+                nextButton.addEventListener('click', () => {
+                    const cards = Array.from(track.children);
+                     const cardStyle = window.getComputedStyle(cards[0]);
+                    const cardMargin = parseFloat(cardStyle.marginLeft) + parseFloat(cardStyle.marginRight);
+                    const cardWidth = cards[0].offsetWidth + cardMargin;
+                    const carouselContainer = document.querySelector('.carousel-container');
+                    const visibleCards = Math.floor(carouselContainer.offsetWidth / cardWidth);
+                    if (currentIndex < cards.length - visibleCards) {
+                        currentIndex++;
+                        updateCarousel();
+                    }
+                });
+
+                prevButton.addEventListener('click', () => {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateCarousel();
+                    }
+                });
+                
+               
+                window.addEventListener('resize', updateCarousel);
+                
+                setTimeout(updateCarousel, 100);
+            }
+        });
+    </script>
+</body>
+</html>
+

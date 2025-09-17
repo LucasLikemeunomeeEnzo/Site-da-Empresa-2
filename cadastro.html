@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Influenciador - PubliMatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #f69420;
+            --primary-hover-color: #d1780b;
+            --dark-color: #1a202c;
+            --light-color: #f7fafc;
+            --body-text-color: #4a5568;
+            --heading-color: #1a202c;
+            --border-radius-sm: 6px;
+            --border-radius-md: 12px;
+            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition-speed: 0.3s;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.7; color: var(--body-text-color); background-color: var(--light-color); -webkit-font-smoothing: antialiased; }
+        .btn { display: inline-block; padding: 12px 28px; border-radius: var(--border-radius-sm); text-decoration: none; font-weight: 700; transition: all var(--transition-speed) ease; border: none; cursor: pointer; text-align: center; width: 100%; }
+        .btn-primary { background-color: var(--primary-color); color: #fff; box-shadow: var(--shadow-soft); }
+        .btn-primary:hover { background-color: var(--primary-hover-color); transform: translateY(-3px); box-shadow: var(--shadow-medium); }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        .cadastro-wrapper { display: flex; min-height: 100vh; }
+        .image-pane { flex: 1; background: linear-gradient(135deg, var(--primary-color) 0%, #1a202c 100%); background-size: cover; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 50px; color: #fff; }
+        .image-pane h1 { font-size: 3rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+        .image-pane p { font-size: 1.1rem; max-width: 400px; opacity: 0.9; }
+        .image-pane a.back-link { color: #fff; text-decoration: none; margin-top: 30px; font-weight: 500; display: inline-block; border-bottom: 1px solid rgba(255,255,255,0.5); transition: all var(--transition-speed) ease; }
+        .image-pane a.back-link:hover { border-bottom-color: #fff; }
+        .form-pane { flex: 1; background-color: var(--light-color); display: flex; justify-content: center; align-items: center; padding: 40px; overflow-y: auto; }
+        .form-container { width: 100%; max-width: 500px; min-height: 70vh; display: flex; flex-direction: column; justify-content: center; position: relative;}
+        .form-container h2 { font-size: 2.5rem; margin-bottom: 15px; color: var(--heading-color); }
+        .form-container .subtitle { margin-bottom: 40px; font-size: 1.1rem; }
+        
+        .cadastro-form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            text-align: left; 
+            transition: opacity 0.5s ease, transform 0.5s ease; 
+        }
+        .cadastro-form.hidden { 
+            display: none;
+        }
+
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 8px; font-weight: 500; color: var(--heading-color); }
+        .cadastro-form input, .cadastro-form textarea, .cadastro-form select { width: 100%; padding: 15px; border: 1px solid #ccd6e0; border-radius: var(--border-radius-sm); font-size: 1rem; font-family: 'Inter', sans-serif; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; background-color: #fff; }
+        .cadastro-form input:focus, .cadastro-form textarea:focus, .cadastro-form select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(246, 148, 32, 0.2); }
+        
+        #confirmation-message { 
+            text-align: center; 
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        #confirmation-message.visible { 
+            display: flex;
+            opacity: 1; 
+            transform: scale(1);
+        }
+        #confirmation-message .icon { width: 80px; height: 80px; margin: 0 auto 20px auto; background-color: #e9f7ef; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        #confirmation-message .icon svg { color: #28a745; }
+        #confirmation-message h3 { font-size: 1.8rem; color: var(--heading-color); margin-bottom: 10px; }
+        #confirmation-message p { margin-bottom: 30px; }
+
+        #status-message { 
+            text-align: center; 
+            font-weight: 600; 
+            margin-top: 20px;
+            color: var(--heading-color);
+        }
+
+        @media (max-width: 992px) {
+            .cadastro-wrapper { flex-direction: column; }
+            .image-pane { flex: 0 0 300px; justify-content: center; align-items: center; text-align: center; padding-top: 80px; }
+            .image-pane h1 { font-size: 2.5rem; }
+            .form-pane { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cadastro-wrapper">
+        <div class="image-pane">
+            <h1>Cadastre-se como Influenciador</h1>
+            <p>Seja descoberto por marcas incríveis e transforme suas parcerias.</p>
+            <a href="planos.html" class="back-link">← Voltar para a seleção de Pacotes</a>
+        </div>
+        <div class="form-pane">
+            <div class="form-container">
+                <h2 id="form-title">Crie sua conta</h2>
+                <p class="subtitle" id="form-subtitle">Preencha os dados abaixo para começar.</p>
+                <form class="cadastro-form" id="influencer-form">
+                    <div class="form-group">
+                        <label for="influencer-name">Nome Completo</label>
+                        <input type="text" name="name" id="influencer-name" placeholder="Ex: Maria da Silva" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="influencer-email">E-mail</label>
+                        <input type="email" name="email" id="influencer-email" placeholder="maria.silva@exemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="influencer-social">Principal Rede Social</label>
+                        <input type="text" name="social" id="influencer-social" placeholder="Ex: @mariasilvaoficial" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="influencer-niche">Nicho de atuação</label>
+                        <input type="text" name="niche" id="influencer-niche" placeholder="Ex: Beleza, Fitness, Jogos" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="influencer-followers">Número de Seguidores</label>
+                        <input type="number" name="followers" id="influencer-followers" placeholder="Ex: 50000" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submit-btn">Enviar Solicitação</button>
+                    <div id="status-message"></div>
+                </form>
+
+                <div id="confirmation-message">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3>Solicitação Enviada!</h3>
+                    <p>Sua solicitação foi recebida com sucesso. Entraremos em contato em breve.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script do EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script type="text/javascript">
+        (function() {
+            // Inicialize o EmailJS com a sua Public Key
+            emailjs.init({
+                publicKey: "6I8Nb9jstJwZvozjz", // Cole sua Public Key aqui
+            });
+        })();
+
+        window.onload = function() {
+            const form = document.getElementById('influencer-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const statusMessage = document.getElementById('status-message');
+            const formTitle = document.getElementById('form-title');
+            const formSubtitle = document.getElementById('form-subtitle');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Previne o comportamento padrão do formulário
+
+                // Limpa a mensagem de status anterior
+                statusMessage.innerText = '';
+                
+                // Muda o texto do botão e o desabilita para evitar múltiplos envios
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Enviando...';
+                
+                const serviceID = 'service_3c53ugx'; // Cole seu Service ID aqui
+                const templateID = 'template_y36qv26'; // Cole seu Template ID aqui
+
+                // Envia os dados do formulário usando EmailJS
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        // Esconde o título, o subtítulo e o formulário
+                        formTitle.style.display = 'none';
+                        formSubtitle.style.display = 'none';
+                        form.classList.add('hidden');
+                        
+                        // Mostra a mensagem de confirmação
+                        confirmationMessage.classList.add('visible');
+                    }, (err) => {
+                        // Reabilita o botão e mostra uma mensagem de erro na tela
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Enviar Solicitação';
+                        statusMessage.style.color = 'red';
+                        let errorMessage = 'Ocorreu um erro ao enviar a solicitação. Por favor, tente novamente.';
+                        
+                        // Adiciona detalhes do erro, se disponíveis
+                        if (err && err.text) {
+                            errorMessage = 'Erro: ' + err.text + '. Por favor, verifique suas credenciais.';
+                        } else if (err && err.status) {
+                            errorMessage = 'Erro de status ' + err.status + '. Verifique as configurações do EmailJS.';
+                        }
+
+                        statusMessage.innerText = errorMessage;
+                        console.error('EmailJS error:', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
