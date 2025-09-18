@@ -21,10 +21,14 @@
     --transition-speed: 0.3s;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',sans-serif; line-height:1.7; color:var(--body-text-color); background-color:var(--light-color); }
+body { font-family:'Inter',sans-serif; line-height:1.7; color:var(--body-text-color); background-color:var(--light-color); -webkit-font-smoothing: antialiased; }
 .btn { display:inline-block; padding:12px 28px; border-radius:var(--border-radius-sm); font-weight:700; border:none; cursor:pointer; text-align:center; width:100%; transition: all var(--transition-speed) ease; }
 .btn-primary { background-color:var(--primary-color); color:#fff; box-shadow:var(--shadow-soft); }
 .btn-primary:hover { background-color:var(--primary-hover-color); transform:translateY(-3px); box-shadow:var(--shadow-medium); }
+.btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { background-color: #e2e8f0; color: var(--heading-color); }
+.btn-secondary:hover { background-color: #cbd5e0; }
+
 .cadastro-wrapper { display:flex; min-height:100vh; }
 .image-pane { flex:1; background:linear-gradient(135deg,var(--primary-color) 0%,#1a202c 100%); display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:50px; color:#fff; }
 .image-pane h1 { font-size:3rem; font-weight:800; margin-bottom:20px; line-height:1.2; }
@@ -35,113 +39,249 @@ body { font-family:'Inter',sans-serif; line-height:1.7; color:var(--body-text-co
 .form-container { width:100%; max-width:500px; min-height:70vh; display:flex; flex-direction:column; justify-content:center; position:relative; }
 .form-container h2 { font-size:2.5rem; margin-bottom:15px; color:var(--heading-color); }
 .form-container .subtitle { margin-bottom:40px; font-size:1.1rem; }
-.cadastro-form { display:flex; flex-direction:column; gap:20px; }
+.cadastro-form { display:flex; flex-direction:column; gap:20px; text-align: left; transition: opacity 0.5s ease, transform 0.5s ease; }
 .cadastro-form.hidden { display:none; }
 .form-group { display:flex; flex-direction:column; }
 .form-group label { margin-bottom:8px; font-weight:500; color:var(--heading-color); }
-.cadastro-form input, .cadastro-form textarea { width:100%; padding:15px; border:1px solid #ccd6e0; border-radius:var(--border-radius-sm); font-size:1rem; transition:border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; background-color:#fff; }
-.cadastro-form input:focus, .cadastro-form textarea:focus { outline:none; border-color:var(--primary-color); box-shadow:0 0 0 3px rgba(43,108,176,0.2); }
-#confirmation-message { text-align:center; display:none; flex-direction:column; justify-content:center; align-items:center; margin-top:20px; }
-#confirmation-message.visible { display:flex; }
+.cadastro-form input, .cadastro-form textarea, .cadastro-form select { width:100%; padding:15px; border:1px solid #ccd6e0; border-radius:var(--border-radius-sm); font-size:1rem; transition:border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; background-color:#fff; }
+.cadastro-form input:focus, .cadastro-form textarea:focus, .cadastro-form select:focus { outline:none; border-color:var(--primary-color); box-shadow:0 0 0 3px rgba(43,108,176,0.2); }
+
+#confirmation-message { text-align: center; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, transform 0.5s ease; }
+#confirmation-message.visible { display:flex; opacity: 1; transform: scale(1); }
 #confirmation-message .icon { width:80px; height:80px; margin:0 auto 20px auto; background-color:#e9f7ef; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 #confirmation-message .icon svg { color:#28a745; }
 #confirmation-message h3 { font-size:1.8rem; color:var(--heading-color); margin-bottom:10px; }
-#confirmation-message p { margin-bottom:0; }
-#status-message { text-align:center; font-weight:600; margin-top:20px; color:var(--heading-color); }
+#confirmation-message p { margin-bottom:30px; }
+#cooldown-display { margin-top: 32px; width: 100%; padding: 20px; background-color: #f1f5f9; border-radius: var(--border-radius-md); }
+#status-message { text-align:center; font-weight:600; margin-top:20px; }
+#status-message.error { color: #c53030; background-color: #fed7d7; border: 1px solid #fc8181; padding: 12px; border-radius: var(--border-radius-sm); }
+
+/* Estilos para o Modal de Confirmação */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
+.modal-overlay.visible { display: flex; opacity: 1; }
+.modal-content { background-color: #fff; padding: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-medium); text-align: center; max-width: 400px; width: 90%; transform: scale(0.95); transition: transform 0.3s ease; }
+.modal-overlay.visible .modal-content { transform: scale(1); }
+.modal-icon { margin: 0 auto 20px; width: 60px; height: 60px; border-radius: 50%; background-color: #ebf8ff; display: flex; align-items: center; justify-content: center; }
+.modal-icon svg { color: var(--primary-color); }
+.modal-content h3 { font-size: 1.5rem; color: var(--heading-color); margin-bottom: 15px; }
+.modal-content p { margin-bottom: 25px; color: var(--body-text-color); }
+.modal-buttons { display: flex; gap: 15px; justify-content: center; }
+.modal-buttons .btn { width: auto; padding: 10px 25px; }
+
 @media (max-width:992px) { .cadastro-wrapper { flex-direction:column; } .image-pane { flex:0 0 300px; justify-content:center; align-items:center; text-align:center; padding-top:80px; } .image-pane h1 { font-size:2.5rem; } .form-pane { padding:40px 20px; } }
 </style>
 </head>
 <body>
 <div class="cadastro-wrapper">
-  <div class="image-pane">
-    <h1>Cadastre sua Agência</h1>
-    <p>Gerencie seus talentos de forma eficiente e descubra novas oportunidades de negócio.</p>
-    <a href="planos.html" class="back-link">← Voltar para a seleção de Pacotes</a>
-  </div>
-  <div class="form-pane">
-    <div class="form-container">
-      <h2 id="form-title">Crie sua conta</h2>
-      <p class="subtitle" id="form-subtitle">Preencha os dados da sua agência.</p>
-      <form class="cadastro-form" id="agencia-form">
-        <div class="form-group">
-          <label for="agencia_name">Nome da Agência</label>
-          <input type="text" name="agencia_name" id="agencia_name" placeholder="Nome completo da agência" required>
-        </div>
-        <div class="form-group">
-          <label for="contact_name_agencia">Nome do Contato Principal</label>
-          <input type="text" name="contact_name_agencia" id="contact_name_agencia" placeholder="Ex: Ana Souza" required>
-        </div>
-        <div class="form-group">
-          <label for="contact_email_agencia">E-mail do Contato</label>
-          <input type="email" name="contact_email_agencia" id="contact_email_agencia" placeholder="exemplo@agencia.com" required>
-        </div>
-        <div class="form-group">
-          <label for="document_agencia">CNPJ</label>
-          <input type="text" name="document_agencia" id="document_agencia" placeholder="00.000.000/0001-00" required>
-        </div>
-        <div class="form-group">
-          <label for="website">Website</label>
-          <input type="url" name="website" id="website" placeholder="https://www.suaagencia.com">
-        </div>
-        <div class="form-group">
-          <label for="social_media">Redes Sociais</label>
-          <input type="text" name="social_media" id="social_media" placeholder="Cole os links do Instagram, LinkedIn, etc.">
-        </div>
-        <div class="form-group">
-          <label for="description_agencia">Descrição da Agência</label>
-          <textarea name="description_agencia" id="description_agencia" rows="4" placeholder="Fale sobre o seu trabalho, clientes e influenciadores representados." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary" id="submit-btn">Enviar Solicitação</button>
-        <div id="status-message"></div>
-      </form>
-      <div id="confirmation-message">
-        <div class="icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        </div>
-        <h3>Solicitação Enviada!</h3>
-        <p>Sua solicitação foi recebida com sucesso. Entraremos em contato em breve.</p>
-      </div>
+    <div class="image-pane">
+        <h1>Cadastre sua Agência</h1>
+        <p>Gerencie seus talentos de forma eficiente e descubra novas oportunidades de negócio.</p>
+        <a href="planos.html" class="back-link">← Voltar para a seleção de Pacotes</a>
     </div>
-  </div>
+    <div class="form-pane">
+        <div class="form-container">
+            <h2 id="form-title">Crie sua conta</h2>
+            <p class="subtitle" id="form-subtitle">Preencha os dados da sua agência.</p>
+            <form class="cadastro-form" id="agencia-form">
+                <div class="form-group">
+                    <label for="agencia_name">Nome da Agência</label>
+                    <input type="text" name="agencia_name" id="agencia_name" placeholder="Nome completo da agência" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact_name_agencia">Nome do Contato Principal</label>
+                    <input type="text" name="contact_name_agencia" id="contact_name_agencia" placeholder="Ex: Ana Souza" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact_email_agencia">E-mail do Contato</label>
+                    <input type="email" name="contact_email_agencia" id="contact_email_agencia" placeholder="exemplo@agencia.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="document_agencia">CNPJ</label>
+                    <input type="text" name="document_agencia" id="document_agencia" placeholder="00.000.000/0001-00" required>
+                </div>
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="url" name="website" id="website" placeholder="https://www.suaagencia.com">
+                </div>
+                <div class="form-group">
+                    <label for="social_media">Redes Sociais</label>
+                    <input type="text" name="social_media" id="social_media" placeholder="Cole os links do Instagram, LinkedIn, etc.">
+                </div>
+                <div class="form-group">
+                    <label for="description_agencia">Descrição da Agência</label>
+                    <textarea name="description_agencia" id="description_agencia" rows="4" placeholder="Fale sobre o seu trabalho, clientes e influenciadores representados." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submit-btn">Enviar Solicitação</button>
+                <div id="status-message"></div>
+            </form>
+            <div id="confirmation-message">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h3>Solicitação Enviada!</h3>
+                <p>Sua solicitação foi recebida com sucesso. Entraremos em contato em breve.</p>
+                <div id="cooldown-display">
+                    <p class="text-sm text-gray-500">Você poderá enviar uma nova solicitação em:</p>
+                    <div id="timer-text" class="text-2xl font-bold text-gray-800 mt-2"></div>
+                </div>
+                 <div class="mt-4">
+                    <a href="#" id="admin-link" class="text-sm text-gray-500 hover:text-gray-700 underline">Você é um admin?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal-overlay" id="confirmation-modal">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </div>
+        <h3>Confirmar Envio</h3>
+        <p>Verifique se todos os seus dados estão corretos antes de continuar.</p>
+        <div class="modal-buttons">
+            <button class="btn btn-secondary" id="cancel-btn">Não, voltar</button>
+            <button class="btn btn-primary" id="confirm-btn">Sim, enviar</button>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 (function(){ emailjs.init("6I8Nb9jstJwZvozjz"); })();
 
-document.getElementById('agencia-form').addEventListener('submit', function(event){
-  event.preventDefault();
-  const form = this;
-  const submitBtn = document.getElementById('submit-btn');
-  submitBtn.disabled = true;
-  submitBtn.innerText = 'Enviando...';
+window.onload = function() {
+    const form = document.getElementById('agencia-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const confirmationMessage = document.getElementById('confirmation-message');
+    const statusMessage = document.getElementById('status-message');
+    const formTitle = document.getElementById('form-title');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const modal = document.getElementById('confirmation-modal');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const timerText = document.getElementById('timer-text');
+    const storageKey = 'lastAgencySubmissionTime';
+    const adminLink = document.getElementById('admin-link');
 
-  const templateParams = {
-    tipo_cadastro: 'Agência',
-    agencia_name: form.agencia_name.value,
-    contact_name_agencia: form.contact_name_agencia.value,
-    contact_email_agencia: form.contact_email_agencia.value,
-    document_agencia: form.document_agencia.value,
-    website: form.website.value,
-    social_media: form.social_media.value,
-    description_agencia: form.description_agencia.value
-  };
+    let countdownInterval;
 
-  emailjs.send('service_3c53ugx', 'template_9fhk9fd', templateParams)
-  .then(() => {
-    document.getElementById('form-title').style.display = 'none';
-    document.getElementById('form-subtitle').style.display = 'none';
-    form.style.display = 'none';
-    document.getElementById('confirmation-message').classList.add('visible');
-  })
-  .catch(err => {
-    console.error('Erro ao enviar email:', err);
-    document.getElementById('status-message').innerText = 'Ocorreu um erro. Tente novamente.';
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'Enviar Solicitação';
-  });
-});
+    function resetFormState() {
+        clearInterval(countdownInterval);
+        localStorage.removeItem(storageKey);
+        confirmationMessage.classList.remove('visible');
+        form.classList.remove('hidden');
+        formTitle.style.display = 'block';
+        formSubtitle.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Enviar Solicitação';
+    }
+
+    function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+    }
+
+    function startCooldownTimer() {
+        const lastSubmissionTime = localStorage.getItem(storageKey);
+        if (!lastSubmissionTime) return;
+        
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+        form.classList.add('hidden');
+        formTitle.style.display = 'none';
+        formSubtitle.style.display = 'none';
+        confirmationMessage.classList.add('visible');
+
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const timePassed = now - lastSubmissionTime;
+            const timeLeft = twentyFourHours - timePassed;
+
+            if (timeLeft <= 0) {
+                resetFormState();
+            } else {
+                timerText.innerText = formatTime(timeLeft);
+            }
+        }, 1000);
+    }
+
+    function checkInitialCooldown() {
+        const lastSubmissionTime = localStorage.getItem(storageKey);
+        if (lastSubmissionTime && (new Date().getTime() - lastSubmissionTime) < (24 * 60 * 60 * 1000)) {
+            startCooldownTimer();
+        }
+    }
+    
+    function sendEmail() {
+         statusMessage.innerText = '';
+         statusMessage.className = '';
+         submitBtn.disabled = true;
+         submitBtn.innerText = 'Enviando...';
+         
+         const templateParams = {
+            tipo_cadastro: 'Agência',
+            agencia_name: form.agencia_name.value,
+            contact_name_agencia: form.contact_name_agencia.value,
+            contact_email_agencia: form.contact_email_agencia.value,
+            document_agencia: form.document_agencia.value,
+            website: form.website.value,
+            social_media: form.social_media.value,
+            description_agencia: form.description_agencia.value
+         };
+
+         emailjs.send('service_3c53ugx', 'template_9fhk9fd', templateParams)
+             .then(() => {
+                 localStorage.setItem(storageKey, new Date().getTime());
+                 startCooldownTimer();
+             }, (err) => {
+                 submitBtn.disabled = false;
+                 submitBtn.innerText = 'Enviar Solicitação';
+                 statusMessage.className = 'error';
+                 let errorMessage = 'Ocorreu um erro. Tente novamente.';
+                 
+                 if (err && err.text) {
+                     errorMessage = 'Erro: ' + err.text;
+                 } else if (err && err.status) {
+                     errorMessage = 'Erro de status ' + err.status;
+                 }
+                 statusMessage.innerText = errorMessage;
+                 console.error('EmailJS error:', err);
+             });
+    }
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        modal.classList.add('visible');
+    });
+
+    cancelBtn.addEventListener('click', () => modal.classList.remove('visible'));
+    
+    confirmBtn.addEventListener('click', () => {
+        modal.classList.remove('visible');
+        sendEmail();
+    });
+
+    adminLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pass = prompt("Digite a senha de administrador:");
+        if (pass === 'fefus123') {
+            resetFormState();
+        }
+    });
+    
+    checkInitialCooldown();
+}
 </script>
 </body>
 </html>
+
+
+
 
